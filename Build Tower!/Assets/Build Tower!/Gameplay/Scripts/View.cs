@@ -3,9 +3,8 @@ using UnityEngine;
 
 namespace Gameplay.Core
 {
-    public abstract class View<T, S> : MonoBehaviour where T : Controller where S : Settings
+    public abstract class View<T> : MonoBehaviour where T : Controller
     {
-        [SerializeField] protected S settings;
         protected T controller;
 
         private void OnEnable()
@@ -45,7 +44,12 @@ namespace Gameplay.Core
         private void OnControllersCreated()
         {
             this.controller = GameManager.instance.GetController<T>();
-            this.controller.SetSettings<S>(this.settings);
+            this.OnControllerSetten();
+        }
+        
+        protected virtual void OnControllerSetten()
+        {
+
         }
     }
 }

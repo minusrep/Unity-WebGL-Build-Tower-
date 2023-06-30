@@ -14,10 +14,12 @@ namespace Gameplay
             {
 
                 if (value < 0f) value = 0f;
-
+                
                 var toScale = this.gameObject.transform.localScale;
                 toScale.y = value;
                 this.gameObject.transform.localScale = toScale;
+                if (value > 0f) this.root.SetActive(true);
+                else this.root.SetActive(false);
 
             }
         }
