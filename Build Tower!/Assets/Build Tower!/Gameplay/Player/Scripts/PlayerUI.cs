@@ -15,8 +15,16 @@ namespace Gameplay.Player
                 this.coinsInfo.text = ($"{value}");
             }
         }
+        public int points
+        {
+            set
+            {
+                this.pointsInfo.text = ($"{value}");
+            }
+        }
 
         [SerializeField] private TextMeshProUGUI coinsInfo;
+        [SerializeField] private TextMeshProUGUI pointsInfo;
     }
 
 }

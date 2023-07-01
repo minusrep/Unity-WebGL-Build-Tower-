@@ -23,7 +23,11 @@ namespace Gameplay
 
         [SerializeField] private float growthRate;
         [SerializeField] private byte gradientStep;
+        [SerializeField] private int fxPoolCapacity;
 
+        private Animator onBuildFX;
+        private List<Animator> fxPool;
+        private int fxPoolIndex;
         private Floor currentFloor;
         private Floor floorPrefab;
         private List<Floor> floors;
@@ -33,6 +37,10 @@ namespace Gameplay
         private void Awake()
         {
             this.floorPrefab = Resources.Load<Floor>("Floor");
+            this.onBuildFX = Resources.Load<Animator>("OnBuildFX");
+            this.fxPool = new List<Animator>();
+            for (int i = 0; i < this.fxPoolCapacity; i++) this.fxPool.Add(Instantiate(this.onBuildFX, this.transform));
+            this.fxPoolIndex = 0;
             this.Reset();
         }
 
@@ -54,7 +62,6 @@ namespace Gameplay
             var newFloor = Instantiate(this.floorPrefab, toPosition, toRotation, this.transform);
             this.currentFloor = newFloor;
             this.currentFloor.color = this.gradientColor;
-
         }
 
         public void Reset()
@@ -72,6 +79,17 @@ namespace Gameplay
             this.gradientColor = new Color32(55, 55, 55, 55);
             this.currentFloor = Instantiate(this.floorPrefab, this.transform);
             this.currentFloor.color = this.gradientColor;
+        }
+
+        public void InvokeOnBuildedFX(int id) 
+        {
+            var fx = this.fxPool[this.fxPoolIndex];
+            this.fxPoolIndex++;
+            if (this.fxPoolIndex == this.fxPoolCapacity) this.fxPoolIndex = 0;
+            var position = this.transform.position;
+            position.y += this.size + this.currentFloorSize;
+            fx.transform.position = position;
+            fx.SetTrigger($"Index {id}");
         }
     }
 

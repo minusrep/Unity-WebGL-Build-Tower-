@@ -45,8 +45,11 @@ namespace Gameplay
             {
                 case GameState.IsIdle:
                     this.cameraMovement.ResetPosition();
+                    this.cameraMovement.ScaleSize(5f);
                     break;
                 case GameState.IsPlaying:
+                    this.cameraMovement.ScaleSize(3f);
+
                     break;
                 case GameState.IsLosed:
                     break;

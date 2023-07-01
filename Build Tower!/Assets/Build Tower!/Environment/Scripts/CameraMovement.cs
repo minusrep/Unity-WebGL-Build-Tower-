@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 namespace Gameplay.Environment
 {
@@ -8,6 +9,7 @@ namespace Gameplay.Environment
         [SerializeField] private Vector3 startPosition;
         [SerializeField] private Vector3 offset;
         [SerializeField] [Range(0f, 10f)] private float smoothness;
+        [SerializeField] private float scaleSpeed;
 
         public void FollowPlayer(float towerSize)
         {
@@ -21,5 +23,39 @@ namespace Gameplay.Environment
         {
             Camera.main.transform.position = this.startPosition;
         }
+
+        public void ScaleSize(float value)
+        {
+            Camera.main.orthographicSize = value;
+        }
+        
+
+        private IEnumerator ScaleRoutine(float toScale)
+        {
+            var currentSize = Camera.main.orthographicSize;
+            var direction = 0f;
+            if (currentSize <= toScale)
+            {
+
+                while (currentSize < toScale)
+                {
+                    Camera.main.orthographicSize += Time.deltaTime * this.scaleSpeed;
+                    yield return null;
+                }
+            }
+            else
+            {
+
+                while (currentSize >= toScale)
+                {
+                    Camera.main.orthographicSize -= Time.deltaTime * this.scaleSpeed;
+                    yield return null;
+                }
+            }
+
+
+
+        }
+
     }
 }

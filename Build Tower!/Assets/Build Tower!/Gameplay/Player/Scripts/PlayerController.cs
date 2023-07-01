@@ -40,6 +40,16 @@ namespace Gameplay
             }
         }
 
+        private int points
+        {
+            get => this._points;
+            set
+            {
+                this._points = value;
+                this.ui.points = value;
+            }
+        }
+        private int _points;
 
         public PlayerController(PlayerData data, SampleController sample, Action<GameState> OnGameStateChangedCallback)
         {
@@ -74,7 +84,17 @@ namespace Gameplay
             {
                 this.tower.CompleteCurrentFloor();
                 this.sample.OnInput();
-                this.coins++;
+                this.points++;
+                if (this.points % 5 == 0) 
+                {
+                    var multiplier = this.points / 5;
+                    this.coins += multiplier;
+                    this.tower.InvokeOnBuildedFX(1);
+                }
+                else
+                {
+                    this.tower.InvokeOnBuildedFX(0);
+                }
             }
             else
             {
@@ -98,7 +118,7 @@ namespace Gameplay
         {
             this.allError = 0f;
             this.tower.Reset();
-            this.coins = 0;
+            this.points = 0;
         }
 
         public override void OnGameStateChange(GameState value)
